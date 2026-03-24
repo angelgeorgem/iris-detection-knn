@@ -1,0 +1,53 @@
+# Install packages (run once)
+install.packages("ggplot2")
+install.packages("class")
+
+# Load libraries
+library(ggplot2)
+library(class)
+
+# Load dataset
+data(iris)
+
+# Select features (2D for visualization)
+features <- iris[, c("Petal.Length", "Petal.Width")]
+labels <- iris$Species
+
+# Normalize function
+normalize <- function(x) {
+  (x - min(x)) / (max(x) - min(x))
+}
+
+# Scale features
+features_scaled <- as.data.frame(lapply(features, normalize))
+
+# Create grid for decision boundary
+x_min <- min(features_scaled$Petal.Length)
+x_max <- max(features_scaled$Petal.Length)
+y_min <- min(features_scaled$Petal.Width)
+y_max <- max(features_scaled$Petal.Width)
+
+grid <- expand.grid(
+  Petal.Length = seq(x_min, x_max, length.out = 100),
+  Petal.Width  = seq(y_min, y_max, length.out = 100)
+)
+
+# Apply KNN
+pred_grid <- knn(
+  train = features_scaled,
+  test = grid,
+  cl = labels,
+  k = 3
+)
+
+# Add predictions to grid
+grid$Species <- pred_grid
+
+# Plot
+ggplot() +
+  geom_tile(data = grid, aes(x = Petal.Length, y = Petal.Width, fill = Species), alpha = 0.3) +
+  geom_point(data = features_scaled, aes(x = Petal.Length, y = Petal.Width, color = labels), size = 2) +
+  labs(title = "KNN Decision Boundary (K = 3)",
+       x = "Petal Length (scaled)",
+       y = "Petal Width (scaled)") +
+  theme_minimal()
