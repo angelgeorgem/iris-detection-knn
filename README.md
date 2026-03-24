@@ -135,17 +135,11 @@ Run the scripts provided in the repository to reproduce results.
 
 ## 📚 References
 
-* R.A. Fisher (1936) – Iris Dataset
 * "An Introduction to Statistical Learning"
 * R Documentation
 
 ---
 
-## 👩‍💻 Authors
-
-* Mathew Mathew
-* Mehana Mumthaz
-* Minu Sabu
 
 ---
 
